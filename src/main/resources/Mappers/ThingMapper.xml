@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Mapper.ThingMapper">
+    <!--查找thing通过people_id-->
+    <resultMap id="selectMap" type="POJO.Thing">
+        <id property="id" column="id"/>
+        <result property="name" column="thing_name"/>
+    </resultMap>
+    <select id="selectByPeoId" resultType="POJO.Thing" resultMap="selectMap">
+        select *
+        from things where people_id = #{id}
+    </select>
+</mapper>

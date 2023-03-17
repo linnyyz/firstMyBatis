@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Mapper.PeopleMapper">
+    <!--添加一个人-->
+    <insert id="addPeople" parameterType="POJO.People">
+        insert into people
+        (id,name)
+        values (#{id} ,#{name})
+    </insert>
+    <!--查看所有人-->
+    <select id="selectAll" resultType="POJO.People">
+        select * from people
+    </select>
+
+    <!--通过id查询-->
+    <select id="selectById" resultType="POJO.People">
+        select *
+        from people
+        <if test="_parameter!=0">
+            where id = #{id}
+        </if>
+    </select>
+
+    <!--通过姓名删除-->
+    <delete id="deleteByName">
+        delete
+        from people
+        where name=#{name};
+    </delete>
+
+    <resultMap id="selectTest1" type="POJO.People">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <association property="card" column="card_id"
+                     javaType="POJO.PeopleCard" select="Mapper.PeopleCardMapper.selectByPeoId"/>
+    </resultMap>
+    <select id="selectTest" parameterType="Integer" resultMap="selectTest1">
+        select *
+        from people where id=#{id};
+    </select>
+
+    <resultMap id="selectTest2" type="POJO.People">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <association property="card" column="card_id"
+                     javaType="POJO.PeopleCard" select="Mapper.PeopleCardMapper.selectByPeoId">
+            <id property="cardId" column="card_id"/>
+            <result property="sex" column="sex"/>
+            <result property="age" column="age"/>
+            <result property="peopleId" column="people_id"/>
+        </association>
+        <collection property="things" column="id"
+                    ofType="POJO.Thing" select="Mapper.ThingMapper.selectByPeoId">
+        </collection>
+    </resultMap>
+
+    <select id="selectTest2" parameterType="Integer" resultMap="selectTest2">
+        select *
+        from people where id = #{id};
+    </select>
+</mapper>
+
